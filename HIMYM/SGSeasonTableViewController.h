@@ -18,5 +18,6 @@ typedef enum {
 
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (nonatomic, assign) NSInteger numberSeason;
+@property (nonatomic, assign) NSInteger numberEpisode;
 
 @end

@@ -41,6 +41,20 @@
 }
 
 
+- (void)viewDidAppear:(BOOL)animated {
+    
+    //переход к эпизоду если он указан
+    if (self.numberEpisode) {
+        NSIndexPath * path = [NSIndexPath indexPathForRow:self.numberEpisode+1 inSection:0];
+        [self.tableView scrollToRowAtIndexPath:path
+                              atScrollPosition:UITableViewScrollPositionMiddle
+                                      animated:YES];
+        [self.tableView selectRowAtIndexPath:path animated:YES scrollPosition:UITableViewScrollPositionMiddle];
+    }
+    
+}
+
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -53,6 +67,7 @@
     [self.searchBar resignFirstResponder];
     //отмена выделения
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+      
 }
 
 //расчет высоты ячейки
@@ -155,7 +170,7 @@
             cell.epDescription.numberOfLines = 0;
             cell.epDescription.text = [NSString stringWithFormat:@"  %@", episode.epDescription];
             cell.epNumber.text = episode.epNumber;
-            cell.userInteractionEnabled = NO;
+            //cell.userInteractionEnabled = NO;
             return cell;
         }
     

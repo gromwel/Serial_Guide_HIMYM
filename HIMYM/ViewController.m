@@ -64,11 +64,31 @@
     //отмена выделения
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    //запускаем новый контролеер с определенным сезоном
-    SGSeasonTableViewController * controller = [self.storyboard instantiateViewControllerWithIdentifier:@"Season"];
-    controller.numberSeason = indexPath.row + 1;
-    [self.navigationController pushViewController:controller animated:YES];
-    //
+    if (self.list == SGListSeason) {
+        
+        //запускаем новый контролеер с определенным сезоном
+        SGSeasonTableViewController * controller = [self.storyboard instantiateViewControllerWithIdentifier:@"Season"];
+        controller.numberSeason = indexPath.row + 1;
+        [self.navigationController pushViewController:controller animated:YES];
+        //
+        
+        
+    //переход в сезон если список серий найденных
+    } else if (self.list == SGListSearchEpisodes) {
+        
+        SGSeason * season = [self.arrayEpisodesBySeason objectAtIndex:indexPath.section];
+        SGEpisode * episode = [season.sortedEpisodes objectAtIndex:indexPath.row];
+        NSCharacterSet * set = [NSCharacterSet characterSetWithCharactersInString:@"xх"];
+        NSArray * arrayInfo = [episode.epNumber componentsSeparatedByCharactersInSet:set];
+        NSInteger seas = [[arrayInfo objectAtIndex:0] intValue];
+        NSInteger ep = [[arrayInfo objectAtIndex:1] intValue];
+        
+        SGSeasonTableViewController * seasonVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Season"];
+        seasonVC.numberSeason = seas;
+        seasonVC.numberEpisode = ep;
+        
+        [self.navigationController pushViewController:seasonVC animated:YES];
+    }
 }
 
 
@@ -167,7 +187,7 @@
         cell.epDescription.attributedText = episode.epDescriptionAttributed;
         
         cell.epNumber.text = episode.epNumber;
-        cell.userInteractionEnabled = NO;
+        //cell.userInteractionEnabled = NO;
         return cell;
     }
     return nil;
@@ -351,9 +371,14 @@
                                                      handler:^(UIAlertAction * _Nonnull action) {
                                                          //переход к сезону
                                                          SGSeasonTableViewController * controller = [self.storyboard instantiateViewControllerWithIdentifier:@"Season"];
-                                                         NSString * numberSeason = [episode.epNumber substringWithRange: NSMakeRange(0, 1)];
-                                                         NSInteger number = [numberSeason intValue];
-                                                         controller.numberSeason = number;
+                                                         NSCharacterSet * set = [NSCharacterSet characterSetWithCharactersInString:@"xх"];
+                                                         NSArray * arrayDetail = [episode.epNumber componentsSeparatedByCharactersInSet:set];
+                                                         NSString * numberSeason = [arrayDetail objectAtIndex:0];
+                                                         NSString * numberEpisode = [arrayDetail objectAtIndex:1];
+                                                         NSInteger season = [numberSeason intValue];
+                                                         NSInteger episode = [numberEpisode intValue];
+                                                         controller.numberSeason = season;
+                                                         controller.numberEpisode = episode;
                                                          [self.navigationController pushViewController:controller animated:YES];
                                                      }];
     [alert addAction:action1];
