@@ -70,17 +70,19 @@
       
 }
 
+/*
 //расчет высоты ячейки
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     //отпределяем границы текста, ширина не более 344
     CGSize constraintSize = CGSizeMake(344.0f, CGFLOAT_MAX);
     UIFont * font = [UIFont systemFontOfSize:13.0f];
     NSDictionary * dict = [[NSDictionary alloc] initWithObjectsAndKeys:font, NSFontAttributeName, nil];
-    
+     
     //первая ячейка всегда изображение
     if (indexPath.row == 0) {
         return 136.f;
-        
+
     //вторая ячейка в зависимости от таблицы
     } else if (indexPath.row == 1) {
         if (self.list == SGListSearchEpisodes) {
@@ -121,8 +123,9 @@
         
     }
     return 0.f;
-}
 
+}
+*/
 
 
 #pragma mark - UITableViewDataSource
@@ -147,10 +150,12 @@
     
     //если загрузка всех эпизодов
     if (self.list == SGListAllEpisodes) {
+        
        //первая ячейка картинка
         if (indexPath.row == 0) {
             ImageTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:iCell];
             cell.imageSeason.image = [UIImage imageNamed:[NSString stringWithFormat:@"season%li.jpg", self.numberSeason]];
+    
             return cell;
             
         //вторая ячейка описание сезона
@@ -171,6 +176,7 @@
             cell.epDescription.text = [NSString stringWithFormat:@"  %@", episode.epDescription];
             cell.epNumber.text = episode.epNumber;
             //cell.userInteractionEnabled = NO;
+            
             return cell;
         }
     

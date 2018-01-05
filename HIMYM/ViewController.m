@@ -155,7 +155,6 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString * identifier = nil;
     
-    
     //таблица сезонов
     if (self.list == SGListSeason) {
         identifier = @"SeasonCell";

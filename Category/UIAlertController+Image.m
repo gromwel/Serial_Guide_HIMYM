@@ -13,7 +13,11 @@
 
 - (void) addImage:(UIImage *)image {
     //определение максимального размера изображения и оригинального размера
-    CGSize maxSize = CGSizeMake(331, 121);
+    CGFloat widthMaxImage = self.view.frame.size.width - 44;
+    CGSize maxSize = CGSizeMake(widthMaxImage, widthMaxImage / 2.67);
+    //CGSize maxSize = CGSizeMake(331, 124);
+    NSLog(@"%f %f", self.view.frame.size.height, self.view.frame.size.width);
+    
     CGSize imgSize = image.size;
     
     //считаем соотношение

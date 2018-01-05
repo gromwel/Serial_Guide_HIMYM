@@ -96,6 +96,7 @@
 		C0209AFC1F9FBFB500C16EBB /* UIAlertController+Image.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+Image.m"; sourceTree = "<group>"; };
 		C0209AFE1F9FC12400C16EBB /* UIImage+Resize.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resize.h"; sourceTree = "<group>"; };
 		C0209AFF1F9FC12400C16EBB /* UIImage+Resize.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Resize.m"; sourceTree = "<group>"; };
+		C06E238A1FB8655A00C762B8 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		C0E3BBFD1FA6510300FD7CA6 /* NSMutableAttributedString+Select.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSMutableAttributedString+Select.h"; sourceTree = "<group>"; };
 		C0E3BBFE1FA6510300FD7CA6 /* NSMutableAttributedString+Select.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSMutableAttributedString+Select.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -141,6 +142,7 @@
 				C0209A6A1F9CC85400C16EBB /* HIMYMTests */,
 				C0209A751F9CC85400C16EBB /* HIMYMUITests */,
 				C0209A501F9CC85400C16EBB /* Products */,
+				C06E23891FB8655900C762B8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -205,6 +207,14 @@
 				C0209A9E1F9D150000C16EBB /* title.jpg */,
 			);
 			path = Images;
+			sourceTree = "<group>";
+		};
+		C06E23891FB8655900C762B8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C06E238A1FB8655A00C762B8 /* AudioToolbox.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		C0A7CF691FA4061E0096E541 /* TableViewCell */ = {
