@@ -16,7 +16,7 @@ typedef enum {
 
 @interface SGSeasonTableViewController : UITableViewController
 
-@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+//@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (nonatomic, assign) NSInteger numberSeason;
 @property (nonatomic, assign) NSInteger numberEpisode;
 

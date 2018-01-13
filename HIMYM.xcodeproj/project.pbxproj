@@ -34,6 +34,7 @@
 		C0209AFD1F9FBFB500C16EBB /* UIAlertController+Image.m in Sources */ = {isa = PBXBuildFile; fileRef = C0209AFC1F9FBFB500C16EBB /* UIAlertController+Image.m */; };
 		C0209B001F9FC12400C16EBB /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = C0209AFF1F9FC12400C16EBB /* UIImage+Resize.m */; };
 		C0E3BBFF1FA6510300FD7CA6 /* NSMutableAttributedString+Select.m in Sources */ = {isa = PBXBuildFile; fileRef = C0E3BBFE1FA6510300FD7CA6 /* NSMutableAttributedString+Select.m */; };
+		C0F5C4DD2006B0570072350B /* SGResultSeasonTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0F5C4DC2006B0570072350B /* SGResultSeasonTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -99,6 +100,8 @@
 		C06E238A1FB8655A00C762B8 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		C0E3BBFD1FA6510300FD7CA6 /* NSMutableAttributedString+Select.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSMutableAttributedString+Select.h"; sourceTree = "<group>"; };
 		C0E3BBFE1FA6510300FD7CA6 /* NSMutableAttributedString+Select.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSMutableAttributedString+Select.m"; sourceTree = "<group>"; };
+		C0F5C4DB2006B0570072350B /* SGResultSeasonTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SGResultSeasonTableViewController.h; sourceTree = "<group>"; };
+		C0F5C4DC2006B0570072350B /* SGResultSeasonTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SGResultSeasonTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +168,8 @@
 				C0209A561F9CC85400C16EBB /* ViewController.m */,
 				C0209A911F9D026400C16EBB /* SGSeasonTableViewController.h */,
 				C0209A921F9D026400C16EBB /* SGSeasonTableViewController.m */,
+				C0F5C4DB2006B0570072350B /* SGResultSeasonTableViewController.h */,
+				C0F5C4DC2006B0570072350B /* SGResultSeasonTableViewController.m */,
 				C0209A581F9CC85400C16EBB /* Main.storyboard */,
 				C0209A5B1F9CC85400C16EBB /* Assets.xcassets */,
 				C0209A5D1F9CC85400C16EBB /* LaunchScreen.storyboard */,
@@ -387,6 +392,7 @@
 				C0209AFD1F9FBFB500C16EBB /* UIAlertController+Image.m in Sources */,
 				C0209AF21F9F97F500C16EBB /* SGHelpFunction.m in Sources */,
 				C0209A8D1F9CDE3600C16EBB /* SGEpisode.m in Sources */,
+				C0F5C4DD2006B0570072350B /* SGResultSeasonTableViewController.m in Sources */,
 				C0209A961F9D0D1900C16EBB /* ImageTableViewCell.m in Sources */,
 				C0209A8A1F9CCC2A00C16EBB /* SGSeason.m in Sources */,
 				C0209A571F9CC85400C16EBB /* ViewController.m in Sources */,

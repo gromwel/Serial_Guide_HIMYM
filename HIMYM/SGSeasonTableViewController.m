@@ -13,14 +13,17 @@
 #import "SGEpisode.h"
 #import "SGHelpFunction.h"
 #import "ViewController.h"
+#import "SGResultSeasonTableViewController.h"
 
 
-@interface SGSeasonTableViewController () <UISearchBarDelegate>
+@interface SGSeasonTableViewController () <UISearchBarDelegate, UISearchResultsUpdating>
 
 
 @property (nonatomic, strong) SGSeason * season;
 @property (nonatomic, strong) NSArray * arrayEpisodesSearch;
 @property (nonatomic, assign) NSInteger list;
+
+@property (nonatomic, strong) SGResultSeasonTableViewController * resultController;
 
 
 @end
@@ -31,6 +34,32 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    /*______________*/
+    /*              */
+    /*______________*/
+    self.definesPresentationContext = YES;
+    
+    //создание резалт контроллера
+    self.resultController = [self.storyboard instantiateViewControllerWithIdentifier:@"Search"];
+    
+    
+    //создание и настройка серч контроллера
+    UISearchController * search = [[UISearchController alloc] initWithSearchResultsController:self.resultController];
+    search.searchBar.placeholder = @"Поиск по сериям сезона";
+    search.searchBar.delegate = self;
+    search.searchResultsUpdater = self;
+    
+    //настройка резалт контроллера
+    self.resultController.searchBar = search.searchBar;
+    self.resultController.numberSeason = self.numberSeason;
+    self.resultController.searching = seasonSearching;
+    
+    self.navigationItem.searchController = search;
+    /*______________*/
+    /*              */
+    /*______________*/
+    
+    
     //создание массива
     self.arrayEpisodesSearch = [[NSArray alloc] init];
     
@@ -38,6 +67,12 @@
     self.navigationItem.title = [NSString stringWithFormat:@"Сезон %li", self.numberSeason];
     //заполнение сериями сезона
     self.season = [SGSeason seasonWithNumber:self.numberSeason];
+}
+
+
+- (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
+        self.resultController.arrayEpisodesSearch = self.arrayEpisodesSearch;
+        [self.resultController.tableView reloadData];
 }
 
 
@@ -64,68 +99,10 @@
 //нажатие на ячейку
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     //скрытие клавиатуры
-    [self.searchBar resignFirstResponder];
+    [self.navigationItem.searchController.searchBar resignFirstResponder];
     //отмена выделения
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-      
 }
-
-/*
-//расчет высоты ячейки
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    //отпределяем границы текста, ширина не более 344
-    CGSize constraintSize = CGSizeMake(344.0f, CGFLOAT_MAX);
-    UIFont * font = [UIFont systemFontOfSize:13.0f];
-    NSDictionary * dict = [[NSDictionary alloc] initWithObjectsAndKeys:font, NSFontAttributeName, nil];
-     
-    //первая ячейка всегда изображение
-    if (indexPath.row == 0) {
-        return 136.f;
-
-    //вторая ячейка в зависимости от таблицы
-    } else if (indexPath.row == 1) {
-        if (self.list == SGListSearchEpisodes) {
-            //размер ячейки серии
-            SGEpisode * episode = [self.arrayEpisodesSearch objectAtIndex:indexPath.row - 1];
-            CGRect frameEpisode = [episode.epDescription boundingRectWithSize:constraintSize
-                                                                      options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
-                                                                   attributes:dict
-                                                                      context:nil];
-            return frameEpisode.size.height + 68.f;
-        }
-        
-        //размер ячейки описания
-        CGRect frameDescription = [self.season.seasonDescription boundingRectWithSize:constraintSize
-                                                                              options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
-                                                                           attributes:dict
-                                                                              context:nil];
-        return frameDescription.size.height + 10;
-        
-    } else {
-        if (self.list == SGListSearchEpisodes) {
-            //размер ячейки серии
-            SGEpisode * episode = [self.arrayEpisodesSearch objectAtIndex:indexPath.row - 1];
-            CGRect frameEpisode = [episode.epDescription boundingRectWithSize:constraintSize
-                                                                      options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
-                                                                   attributes:dict
-                                                                      context:nil];
-            return frameEpisode.size.height + 68.f;
-        }
-        
-        //размер ячейки серии
-        SGEpisode * episode = [self.season.episodes objectAtIndex:indexPath.row - 2];
-        CGRect frameEpisode = [episode.epDescription boundingRectWithSize:constraintSize
-                                                                  options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
-                                                               attributes:dict
-                                                                  context:nil];
-        return frameEpisode.size.height + 68.f;
-        
-    }
-    return 0.f;
-
-}
-*/
 
 
 #pragma mark - UITableViewDataSource
@@ -145,69 +122,34 @@
     NSString * dCell = @"DescriptionCell";
     NSString * eCell = @"EpisodeCell";
     
-    
-    
-    
-    //если загрузка всех эпизодов
-    if (self.list == SGListAllEpisodes) {
         
-       //первая ячейка картинка
-        if (indexPath.row == 0) {
-            ImageTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:iCell];
-            cell.imageSeason.image = [UIImage imageNamed:[NSString stringWithFormat:@"season%li.jpg", self.numberSeason]];
-    
-            return cell;
-            
-        //вторая ячейка описание сезона
-        } else if (indexPath.row == 1) {
-            UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:dCell];
-            cell.textLabel.text = [NSString stringWithFormat:@"  %@", self.season.seasonDescription];
-            cell.textLabel.numberOfLines = 0;
-            cell.userInteractionEnabled = NO;
-            return cell;
-            
-        //далее серии
-        } else {
-            EpisodeTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:eCell];
-            SGEpisode * episode = [self.season.episodes objectAtIndex:indexPath.row - 2];
-            cell.epName.text = [NSString stringWithFormat:@"«%@»", episode.epName];
-            cell.epNameEng.text = [NSString stringWithFormat:@"«%@»", episode.epNameEng];
-            cell.epDescription.numberOfLines = 0;
-            cell.epDescription.text = [NSString stringWithFormat:@"  %@", episode.epDescription];
-            cell.epNumber.text = episode.epNumber;
-            //cell.userInteractionEnabled = NO;
-            
-            return cell;
-        }
-    
-    //загрузка только найденных эпизодов
+    //первая ячейка картинка
+    if (indexPath.row == 0) {
+        ImageTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:iCell];
+        cell.imageSeason.image = [UIImage imageNamed:[NSString stringWithFormat:@"season%li.jpg", self.numberSeason]];
+
+        return cell;
+        
+    //вторая ячейка описание сезона
+    } else if (indexPath.row == 1) {
+        UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:dCell];
+        cell.textLabel.text = [NSString stringWithFormat:@"  %@", self.season.seasonDescription];
+        cell.textLabel.numberOfLines = 0;
+        cell.userInteractionEnabled = NO;
+        return cell;
+        
+    //далее серии
     } else {
+        EpisodeTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:eCell];
+        SGEpisode * episode = [self.season.episodes objectAtIndex:indexPath.row - 2];
+        cell.epName.text = [NSString stringWithFormat:@"«%@»", episode.epName];
+        cell.epNameEng.text = [NSString stringWithFormat:@"«%@»", episode.epNameEng];
+        cell.epDescription.numberOfLines = 0;
+        cell.epDescription.text = [NSString stringWithFormat:@"  %@", episode.epDescription];
+        cell.epNumber.text = episode.epNumber;
+        //cell.userInteractionEnabled = NO;
         
-        //картинка
-        if (indexPath.row == 0) {
-            ImageTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:iCell];
-            cell.imageSeason.image = [UIImage imageNamed:[NSString stringWithFormat:@"season%li.jpg", self.numberSeason]];
-            return cell;
-            
-        //серии
-        } else {
-            EpisodeTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:eCell];
-            SGEpisode * episode = [self.arrayEpisodesSearch objectAtIndex:indexPath.row - 1];
-            
-            cell.epName.text = [NSString stringWithFormat:@"«%@»", episode.epName];
-            cell.epName.attributedText = episode.epNameAttributed;
-            
-            cell.epNameEng.text = [NSString stringWithFormat:@"«%@»", episode.epNameEng];
-            cell.epNameEng.attributedText = episode.epNameEngAttributed;
-            
-            cell.epDescription.numberOfLines = 0;
-            cell.epDescription.text = [NSString stringWithFormat:@"  %@", episode.epDescription];
-            cell.epDescription.attributedText = episode.epDescriptionAttributed;
-            
-            cell.epNumber.text = episode.epNumber;
-            cell.userInteractionEnabled = NO;
-            return cell;
-        }
+        return cell;
     }
     
     return nil;
@@ -316,7 +258,7 @@
 //алерт
 - (void) showEpisode {
     //закрываем клавиатуру если она закрыта
-    if (self.searchBar.isFirstResponder) {
+    if (self.navigationItem.searchController.searchBar.isFirstResponder) {
         [self.view endEditing:YES];
     }
     

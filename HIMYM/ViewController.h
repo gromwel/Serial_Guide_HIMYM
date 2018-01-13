@@ -16,7 +16,6 @@ typedef enum {
 
 @interface ViewController : UIViewController
 
-@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UITableView *tableViewList;
 
 - (void) showEpisode;

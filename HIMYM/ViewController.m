@@ -13,9 +13,10 @@
 #import "EpisodeTableViewCell.h"
 #import "SGHelpFunction.h"
 #import "AppDelegate.h"
+#import "SGResultSeasonTableViewController.h"
 
 
-@interface ViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
+@interface ViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchResultsUpdating>
 
 
 @property (nonatomic, strong) NSArray * arraySeasons;
@@ -23,6 +24,7 @@
 @property (nonatomic, strong) NSArray * arrayEpisodesBySeason;
 @property (nonatomic, assign) NSInteger list;
 
+@property (nonatomic, strong) SGResultSeasonTableViewController * resultController;
 
 @end
 
@@ -32,6 +34,33 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    //стиль large title
+    self.navigationController.navigationBar.prefersLargeTitles = YES;
+    
+    /*______________*/
+    /*              */
+    /*______________*/
+    self.definesPresentationContext = YES;
+    
+    //создание резалт контроллера
+    self.resultController = [self.storyboard instantiateViewControllerWithIdentifier:@"Search"];
+    
+    //создание и настройка серч контроллера
+    UISearchController * searchController = [[UISearchController alloc] initWithSearchResultsController:self.resultController];
+    searchController.searchBar.placeholder = @"Поиск по сериалу";
+    searchController.searchBar.delegate = self;
+    searchController.searchResultsUpdater = self;
+    
+    //настройка резалт контроллера
+    self.resultController.searchBar = searchController.searchBar;
+    self.resultController.searching = serialSearching;
+    
+    self.navigationItem.hidesSearchBarWhenScrolling = YES;
+    self.navigationItem.searchController = searchController;
+    /*______________*/
+    /*              */
+    /*______________*/
+    
     //тайтл
     self.navigationItem.title = @"#HIMYM";
     //формирование массива сезонов
@@ -39,7 +68,7 @@
     self.arraySeasons = [self createArraySeasons];
     //формирование массива серий по поиску
     self.arrayEpisodesSearch = [[NSArray alloc] init];
-    [self sortedEpisodesWithFilter:self.searchBar.text IsDelite:NO];
+    [self sortedEpisodesWithFilter:self.navigationItem.searchController.searchBar.text IsDelite:NO];
     //решение о том что оттобразить, сезоны или серии
     if (!self.arrayEpisodesSearch) {
         self.list = SGListSeason;
@@ -47,6 +76,13 @@
         self.list = SGListEpisodes;
     }
 }
+
+
+- (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
+    self.resultController.arrayEpisodesSearch = self.arrayEpisodesBySeason;
+    [self.resultController.tableView reloadData];
+}
+
 
 
 - (void)didReceiveMemoryWarning {
@@ -60,7 +96,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     //скрываем клавиатуру
-    [self.searchBar resignFirstResponder];
+    [self.navigationItem.searchController.searchBar resignFirstResponder];
     //отмена выделения
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
@@ -68,7 +104,7 @@
         
         //запускаем новый контролеер с определенным сезоном
         SGSeasonTableViewController * controller = [self.storyboard instantiateViewControllerWithIdentifier:@"Season"];
-        controller.numberSeason = indexPath.row + 1;
+        controller.numberSeason = indexPath.row;
         [self.navigationController pushViewController:controller animated:YES];
         //
         
@@ -136,13 +172,13 @@
         SGSeason * season = [self.arrayEpisodesBySeason objectAtIndex:section];
         header = [NSString stringWithFormat:@"Сезон %@", season.seasoneNumber];
     }
-    return header;
+    return nil;
 }
 
 //сколоко ячеек в каждой секции
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    //по умолчанию 9 ячеек в таблице
-    NSInteger rows = self.arraySeasons.count;
+    //по умолчанию 9 ячеек в таблице и изображение
+    NSInteger rows = self.arraySeasons.count + 1;
     //если показываем эпизоды то количество ячеек пересчитывается
     if (self.list == SGListEpisodes) {
         SGSeason * season = [self.arrayEpisodesBySeason objectAtIndex:section];
@@ -157,6 +193,7 @@
     
     //таблица сезонов
     if (self.list == SGListSeason) {
+        /*
         identifier = @"SeasonCell";
         UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:identifier];
         if (!cell) {
@@ -165,6 +202,29 @@
         //просто заполняем названиями сезонов
         cell.textLabel.text = [self.arraySeasons objectAtIndex:indexPath.row];
         return cell;
+        */
+        
+        
+        //просто заполняем названиями сезонов
+        if (indexPath.row == 0) {
+            identifier = @"ImageCell";
+            UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+            if (!cell) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+                cell.userInteractionEnabled = NO;
+            }
+            return cell;
+        } else {
+            identifier = @"SeasonCell";
+            UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+            if (!cell) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+            }
+            cell.textLabel.text = [self.arraySeasons objectAtIndex:indexPath.row - 1];
+            return cell;
+        }
+        
+        
         
     //таблица эпизодов
     } else if (self.list == SGListEpisodes) {
@@ -353,7 +413,7 @@
 //алерт
 - (void) showEpisode {
     //закрываем клавиатуру если она закрыта
-    if (self.searchBar.isFirstResponder) {
+    if (self.navigationItem.searchController.searchBar.isFirstResponder) {
         [self.view endEditing:YES];
     }
     
