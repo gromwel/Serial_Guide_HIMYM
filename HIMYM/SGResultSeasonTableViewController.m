@@ -26,13 +26,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSLog(@"NSLOG SEARCHING - %i", self.searching);
 }
 
 #pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     if (self.searching == serialSearching) {
-        NSLog(@"ARRAY - %li", self.arrayEpisodesSearch.count);
         return self.arrayEpisodesSearch.count;
     }
     
@@ -109,10 +107,8 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (self.searchBar.isFirstResponder) {
-         NSLog(@"END EDITING");
         [self.searchBar resignFirstResponder];
     } else {
-         NSLog(@"SERIES");
         [self showEpisodeWithIndexPath:indexPath];
     }
 }

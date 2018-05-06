@@ -164,6 +164,7 @@
 }
 
 //хедер к секциям
+/*
 - (nullable NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     //по умолчанию хедер пустой
     NSString * header = @"";
@@ -174,6 +175,7 @@
     }
     return nil;
 }
+ */
 
 //сколоко ячеек в каждой секции
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -227,7 +229,7 @@
         
         
     //таблица эпизодов
-    } else if (self.list == SGListEpisodes) {
+    } else { //if (self.list == SGListEpisodes) {
         SGSeason * season = [self.arrayEpisodesBySeason objectAtIndex:indexPath.section];
         
         identifier = @"EpisodeCell";
@@ -249,6 +251,7 @@
         //cell.userInteractionEnabled = NO;
         return cell;
     }
+    
     return nil;
 }
 
@@ -291,7 +294,7 @@
 //изменение текста
 - (BOOL)searchBar:(UISearchBar *)searchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     
-    NSString * resultString = [[NSString alloc] init];
+    NSString * resultString = @"";
     
     //определяем измененный текст
     if ([text isEqualToString:@"\n"]) {
@@ -339,8 +342,6 @@
         self.list = SGListSeason;
         self.navigationItem.title = @"#HIMYM";
     }
-    
-    NSLog(@"%li", self.arrayEpisodesSearch.count);
 }
 
 
@@ -372,7 +373,7 @@
     //создаем массив сортированных эпизодов по сезонам
     NSMutableArray * sortedArray = [[NSMutableArray alloc] init];
     //текущий сезон
-    NSString * currentSeason = nil;
+    NSString * currentSeason = @"";
     //для каждого эпизода из общего массива
     for (SGEpisode * episode in self.arrayEpisodesSearch) {
         //берем номер сезона этого эпизода
@@ -394,6 +395,7 @@
             currentSeason = numberSeason;
         }
     }
+    
     return sortedArray;
 }
 

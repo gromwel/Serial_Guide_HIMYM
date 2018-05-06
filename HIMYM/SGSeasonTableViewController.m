@@ -77,6 +77,7 @@
 
 
 - (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     
     //переход к эпизоду если он указан
     if (self.numberEpisode) {

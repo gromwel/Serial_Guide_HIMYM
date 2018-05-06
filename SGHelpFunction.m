@@ -62,7 +62,7 @@
 + (NSArray *) searchEpisodeByString:(NSString *)searchString InSeason:(NSInteger)seasonNumber OrEpisodes:(NSArray *)episodes {
     
     //создаем массив всех серий
-    NSArray * arrayAllEpisodes = [[NSArray alloc] init];
+    NSArray * arrayAllEpisodes; // = [[NSArray alloc] init];
     
     //если массив переданных эпизодов не пустой, то берем его
     if (episodes.count != 0) {
